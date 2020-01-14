@@ -11,33 +11,26 @@ songs = [
 ]
 
 def help
-  puts "I accept the following commands:"
-  puts "- help : displays this help message"
-  puts "- list : displays a list of songs you can play"
-  puts "- play : lets you choose a song to play"
-  puts "- exit : exits this program"
+  puts  "I accept the following commands:"
+  puts  "- help : displays this help message"
+  puts  "- list : displays a list of songs you can play"
+  puts  "- play : lets you choose a song to play"
+  puts  "- exit : exits this program"
 end
 
 def list(songs)
-  songs.each_with_index { |song, index|
-    puts (index + 1).to_s + ". " + song
-    }
+  songs.each_with_index do |song, i|
+    puts "#{i+1}. #{song}"
+  end
 end
 
 def play(songs)
   puts "Please enter a song name or number:"
-  user_response = gets.chomp
-  output = ""
-  songs.each_with_index { |song, index|
-    if user_response == (index + 1).to_s || user_response == song
-      output = "Playing #{song}"
-    end
-  }
-  if output.include?("Playing")
-    puts output
-  elsif user_response == "list"
-    list(songs)
-    play(songs)
+  song_to_play = gets.chomp
+  if (1..9).to_a.include?(song_to_play.to_i)
+    puts "Playing #{songs[song_to_play.to_i - 1]}"
+  elsif songs.include?(song_to_play)
+    puts "Playing #{song_to_play}"
   else
     puts "Invalid input, please try again"
   end
@@ -48,27 +41,25 @@ def exit_jukebox
 end
 
 def run(songs)
-  help
-  puts "Please enter a command:"
-  user_response = gets.chomp
-  while user_response != "exit"
-    case user_response
-      when "help"
-        help
-        puts "Please enter a command:"
-        user_response = gets.chomp
-      when "list"
-        list(songs)
-        puts "Please enter a command:"
-        user_response = gets.chomp
-      when "play"
-        play(songs)
-        puts "Please enter a command:"
-        user_response = gets.chomp
-      else
-        puts "Invalid input, please try again"
-        user_response = gets.chomp
+  # help
+
+  input = ""
+  while input
+    puts "Please enter a command:"
+    input = gets.downcase.strip
+    case input
+    when 'list'
+      list(songs)
+    when 'play'
+      list(songs)
+      play(songs)
+    when 'help'
+      help
+    when 'exit'
+      exit_jukebox
+      break
+    else
+      help
     end
   end
-  exit_jukebox
 end
